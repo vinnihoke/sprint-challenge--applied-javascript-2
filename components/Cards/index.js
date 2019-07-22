@@ -21,62 +21,50 @@
 axios.get('https://lambda-times-backend.herokuapp.com/articles').then((axiosData) => {
 	console.log('axiosData.data: ', axiosData.data);
 	// Add a new construction here. Pass in axiosData.data, but in the constructor access the data with axiosData only.
-	new Article(axiosData.data.articles);
+	const topics = axiosData.data.articles;
+	for(let key in topics){
+		topics[key].forEach((axiosData) => {
+			new Article(axiosData);
+		})
+	}
 }).catch((err) => {
 	console.log('Error: ', err);
 });
 
 class Article {
 	constructor(axiosData){
-		const mount = document.querySelector('.cards-container');
+		this.mount = document.querySelector('.cards-container');
 
-		// for(var key in articles){
-		// 	this.createArticle(dataItem);
-		// 	mount.appendChild(this.createArticle(dataItem));
-		// }
-
-		let arr = Objects.keys(axiosData);
-
-		arr.forEach(key => { axiosData.key } => {
-			key.createArticle(dataItem);
-			mount.appendChild(this.createArticle(dataItem));
-		});
-	}
-
-	createArticle(data){
-		// ! This should loop as well? Because there are a few articles within each root element?
-		data.forEach((topic) => {
-		
 		// Div.card
-		const card = document.createElement('div');
+		this.card = document.createElement('div');
+		this.card.classList.add('card');
 
 		// Create div.headline output 'headline of article', append to card.
-		const headline = document.createElement('div');
-		headline.classList.add('headline');
-		headline.textContent = `${topic.headline}`
-		card.appendChild(headline);
+		this.headline = document.createElement('div');
+		this.headline.classList.add('headline');
+		this.headline.textContent = axiosData.headline;
+		this.card.appendChild(this.headline);
 
 		// Create div.author append to card
-		const authorContainer = document.createElement('div');
-		authorContainer.classList.add('author');
-		card.appendChild(authorContainer); 
+		this.authorContainer = document.createElement('div');
+		this.authorContainer.classList.add('author');
+		this.card.appendChild(this.authorContainer); 
 
 		// Create div.img-container, append to authorContainer
-		const imgContainer = document.createElement('div');
-		imgContainer.classList.add('img-container');
-		authorContainer.appendChild(imgContainer);
+		this.imgContainer = document.createElement('div');
+		this.imgContainer.classList.add('img-container');
+		this.authorContainer.appendChild(this.imgContainer);
 
 		// Create img, setAttribute URL to authors image, append to img-container
-		const img = document.createElement('img');
-		img.setAttribute('src', `${topic.photo}`);
-		imgContainer.appendChild(img);
+		this.img = document.createElement('img');
+		this.img.setAttribute('src', `${axiosData.authorPhoto}`);
+		this.imgContainer.appendChild(this.img);
 
 		// Create span, output 'By {authors name}, append to authorContainer
-		const author = document.createElement('span');
-		author.textContent = `${topic.authorName}`;
-		authorContainer.appendChild(author);
+		this.author = document.createElement('span');
+		this.author.textContent = axiosData.authorName;
+		this.authorContainer.appendChild(this.author);
 
-		return card;
-		})
+		this.mount.appendChild(this.card);
 	}
 }
