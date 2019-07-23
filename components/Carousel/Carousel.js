@@ -37,12 +37,13 @@ const Carousel = () => {
   leftButtonIcon.textContent = 'keyboard_arrow_left';
   leftButton.appendChild(leftButtonIcon);
   carousel.appendChild(leftButton);
+  leftButton.addEventListener('click', (e) => advanceCarousel(-1))
 
   // Create img src="./assets/carousel/mountains.jpeg", append to carousel.
   const img1 = document.createElement('img');
   img1.src = './assets/carousel/mountains.jpeg';
   carousel.appendChild(img1);
-  console.log(img1);
+  img1.style.display = 'flex';
 
   // Create img src="./assets/carousel/computer.jpeg", append to carousel.
   const img2 = document.createElement('img');
@@ -68,8 +69,21 @@ const Carousel = () => {
   rightButtonIcon.textContent = 'keyboard_arrow_right';
   rightButton.appendChild(rightButtonIcon);
   carousel.appendChild(rightButton);
+  rightButton.addEventListener('click', (e) => advanceCarousel(1))
 
   mount.appendChild(carousel);
 }
 
 Carousel();
+
+const images = [...document.querySelectorAll('.carousel img')];
+let index = 0
+
+const advanceCarousel = (value) => {
+  images.forEach((image) => {image.style.display = 'none'});
+  index += value;
+  if(index > images.length - 1) index = 0;
+  else if(index < 0) index = images.length - 1;
+
+  images[index].style.display = "flex";
+}
