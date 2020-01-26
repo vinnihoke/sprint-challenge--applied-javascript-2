@@ -20,8 +20,10 @@
 
 axios.get('https://lambda-times-backend.herokuapp.com/articles').then((axiosData) => {
 	console.log('axiosData.data: ', axiosData.data);
-	// Add a new construction here. Pass in axiosData.data, but in the constructor access the data with axiosData only.
 	const topics = axiosData.data.articles;
+
+	// ! This was tricky. axiosData gave us back an object with keys as topics and arrays as values. We need to loop over the object storing each key, then use the .forEach method to loop over each item and use new Article.
+	
 	for(let key in topics){
 		topics[key].forEach((axiosData) => {
 			new Article(axiosData);
